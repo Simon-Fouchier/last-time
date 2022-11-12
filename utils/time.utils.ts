@@ -9,13 +9,13 @@ function formatTime(time: number): string {
     const minutes = Math.floor(remainingTime / 60000);
     remainingTime = time % 60000
     const seconds = Math.floor(remainingTime / 1000);
+
+    if (years < 0 || days < 0 || hours < 0 || minutes < 0 || seconds < 0) {
+        return `0 years, 0 days, 0 hours, 0 minutes, 0 seconds`;
+    }
     return `${years} years, ${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds`;
 }
 
-
-const randomDate = () => new Date(Math.random() * Date.now());
-
 export const timeUtils = Object.freeze({
     formatTime,
-    randomDate
 })
