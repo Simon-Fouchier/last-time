@@ -1,12 +1,16 @@
 "use client";
 
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import NewActivity from "./NewActivity";
 import {IActivity} from "../interface/activity.interface";
 import Activity from "./Activity";
 
 const MyActivities = () => {
-    const [activities, setActivities] = useState<IActivity[]>(JSON.parse(localStorage?.getItem("activities") ?? "[]") ?? []);
+    const [activities, setActivities] = useState<IActivity[]>([]);
+
+    useEffect(() => {
+        setActivities(JSON.parse(localStorage?.getItem("activities") ?? "[]") ?? []);
+    }, [])
 
     const onRemove = (name: string) => {
         const parsedActivities: IActivity[] = JSON.parse(localStorage?.getItem("activities") ?? "[]");
