@@ -1,4 +1,5 @@
 export interface IActivity {
-    date: string | null | Date;
+    id: string,
+    activityDate: string;
     name: string;
 }

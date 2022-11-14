@@ -21,11 +21,18 @@ const NewActivity: FC<NewActivityProps> = ({onCreate}) => {
         const target = event.target as typeof event.target & {
             name: { value: string };
         }
-        const item: IActivity[] = JSON.parse(localStorage?.getItem("activities") ?? "[]") ?? [];
-        const newItem = {date, name: target.name.value};
-        localStorage?.setItem("activities", JSON.stringify([...item, newItem]));
-        onReset();
-        onCreate(newItem)
+
+        const newItem = {activityDate: date, name: target.name.value};
+
+        fetch("/api/activities", {
+            body: JSON.stringify(newItem),
+            method: "POST",
+            credentials: "include"
+        }).then((res: Response) => {
+            onReset();
+            res.json().then((item: IActivity) => onCreate(item));
+        })
+
     }
 
     const onReset = () => {

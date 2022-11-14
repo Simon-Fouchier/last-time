@@ -1,35 +1,30 @@
 "use client";
 
-import {useEffect, useState} from "react";
+import {FC, useEffect, useState} from "react";
 import NewActivity from "./NewActivity";
 import {IActivity} from "../interface/activity.interface";
 import Activity from "./Activity";
 
-const MyActivities = () => {
-    const [activities, setActivities] = useState<IActivity[]>([]);
+const MyActivities: FC<{ activities: IActivity[] }> = ({activities}) => {
 
-    useEffect(() => {
-        setActivities(JSON.parse(localStorage?.getItem("activities") ?? "[]") ?? []);
-    }, [])
+    const [myActivities, setMyActivities] = useState<IActivity[]>(activities);
 
-    const onRemove = (name: string) => {
-        const parsedActivities: IActivity[] = JSON.parse(localStorage?.getItem("activities") ?? "[]");
-        const activityToRemove: IActivity | undefined = parsedActivities.find((activity: { name: string; }) => activity.name === name);
+    const onRemove = (id: string) => {
+        const activityToRemove: IActivity | undefined = myActivities.find((activity: { id: string; }) => activity.id === id);
+        const newActivities = [...myActivities];
         if (activityToRemove) {
-            parsedActivities.splice(parsedActivities.indexOf(activityToRemove), 1);
-            localStorage?.setItem("activities", JSON.stringify(parsedActivities));
-            setActivities(parsedActivities);
+            newActivities.splice(newActivities.indexOf(activityToRemove), 1);
+            setMyActivities(newActivities);
         }
     }
 
     return <>
-        {activities.map((activity: any) =>
+        {myActivities.map((activity: any) =>
             <Activity
                 onRemove={onRemove}
-                key={activity.name}
-                date={activity.date}
-                name={activity.name}/>)}
-        <NewActivity onCreate={(item) => setActivities(prev => [...prev, item])}/>
+                key={activity.id}
+                activity={activity}/>)}
+        <NewActivity onCreate={(item) => setMyActivities(prev => [...prev, item])}/>
     </>
 
 }
